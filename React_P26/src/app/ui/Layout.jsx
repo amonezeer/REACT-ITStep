@@ -18,6 +18,9 @@ export default function Layout() {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link text-dark" to="/privacy">Privacy</Link>
+                        </li>    
+                         <li className="nav-item">
+                            <Link className="nav-link text-dark" to="/about">About</Link>
                         </li>                        
                     </ul>
                     <div>      
