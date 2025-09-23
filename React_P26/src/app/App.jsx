@@ -4,10 +4,14 @@ import Layout from './ui/Layout';
 import Home from '../pages/home/Home';
 import Privacy from '../pages/privacy/Privacy';
 import About from '../pages/about/About';
+import AppContext from './features/context/AppContext';
+import { useState } from 'react';
 
 
 function App() {
-  return (
+  const [user, setUser] = useState(null);
+
+  return <AppContext.Provider value={ {message: "Hello from App", user, setUser}}>
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Layout />} >
@@ -17,7 +21,7 @@ function App() {
       </Route>
     </Routes>
     </BrowserRouter>
-  );
+</AppContext.Provider>;
 }
 
 export default App;
