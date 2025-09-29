@@ -1,32 +1,39 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import AppContext from "../../app/features/context/AppContext";
-import Calc from "../../widgets/calc/Calc";
+import "./ui/Home.css"
+import { Link } from "react-router-dom";
 
 export default function Home() {
-    const {user} = useContext(AppContext);  // hook
-    const [count, setCount] = useState(0);     // hook
+    const {request, productGroup} = useContext(AppContext);  // hook
+    const [pageData, setPageData] = useState({productGroup:[]});
 
-    const onCountClick = () => {
-        setCount(count + 1);
-    };
+    useEffect(() => {
+       request("/api/product-group")
+       .then(setPageData)
+    }, []);
 
-    return <div className="text-center">
-    <h1 className="display-4">Home, sweet home</h1>
-    <div className="row" >
-        <div className="col"><button className="btn btn-dark" onClick={onCountClick}>+1</button>
-    <h3>Підсумок: {count}</h3>
-    {!!user && <p>Вітання, {user.name}</p>}
-    <hr/>
-    <CountWidget count={count} setCount={setCount} />
-    </div>
-        <div className="col"> <Calc /></div>
-    </div>
-</div>;
+   return <div>
+        <div className="page-title">
+            <img src={pageData.pageTitleImg} alt="pageTitleImg"/>
+            <h1 className="display-4">{pageData.pageTitle}</h1>
+        </div>
+        <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mt-4">
+            {productGroup.map(grp => <GroupCard key={grp.slug} group={grp} />)}
+        </div>
+    </div>;
 }
 
-function CountWidget(props){
-    return <div className="border p-2 m-3">Ваш підсумок: {props.count}
-    <button className="btn btn-dark" onClick={() => props.setCount(0)}>Скинути</button>
-    </div>
+
+
+function GroupCard({group}) {
+    return <div className="card h-100">
+                    <Link to={"/group/" + group.slug} className="nav-link">
+                        <img src={group.imageUrl} className="card-img-top" alt={group.name}/>
+                    </Link>
+                    <div className="card-body">
+                        <h5 className="card-title">{group.name}</h5>
+                        <p className="card-text">{group.description}</p>
+                    </div>
+                </div>
 }
